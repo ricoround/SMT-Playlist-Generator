@@ -57,9 +57,11 @@ def get_playlist_tracks(playlist_url):
 
 
 def main():
+    # Add the playlist URLs here
     playlists = [
-        "https://open.spotify.com/playlist/4P4sVCiU21HvonfXg9wvDs",
-        "https://open.spotify.com/playlist/3axoelQG1FrBeeq9MNTBP6",
+        # "https://open.spotify.com/playlist/4P4sVCiU21HvonfXg9wvDs",
+        # "https://open.spotify.com/playlist/3axoelQG1FrBeeq9MNTBP6",
+        "https://open.spotify.com/playlist/4v7hIKEzzsEgIKrjrLghb9"
     ]
     
     # Get all the song titles from a given playlist, so that it can be used to 
