@@ -38,6 +38,9 @@ The feature extractor creates a database with the features of the songs. To quic
 To use the Spotify API, you need to create a Spotify developer account and create an application. You can find more information [here](https://developer.spotify.com/documentation/general/guides/app-settings/).
 
 After creating the application, you need to create a file called [`secrets.py`](config/secrets.py) in the [`config`](config) folder. This file will contain the client id and client secret of your Spotify application. You can find these in the Spotify developer dashboard. Make sure that this file is in the `.gitignore` file, because you don't want to share these secrets.
-
+```python
+SPOTIFY_CLIENT_ID = "your_client_id"
+SPOTIFY_CLIENT_SECRET = "your_client_secret"
+```
 
 

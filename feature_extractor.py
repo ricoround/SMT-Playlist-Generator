@@ -104,7 +104,7 @@ def main():
             continue
 
         y, sr = load_audio(os.path.join(folder_path, songname))
-        tempo, beats = beat_track(y, sr)
+        tempo, _ = beat_track(y, sr)
 
         # Insert song and tempo into the database
         cursor.execute(
