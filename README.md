@@ -18,8 +18,19 @@ In short, how it works:
 ## Installation
 (This project uses Python 3.8.10)
 
+Best way to install the required packages is to use a virtual environment.
+
+### Install packages
 
 Install the required packages using the following command:
 ```
-pip install -r requirements.txt
+pip install -r config/requirements.txt
 ```
+
+### Spotify API
+To use the Spotify API, you need to create a Spotify developer account and create an application. You can find more information [here](https://developer.spotify.com/documentation/general/guides/app-settings/).
+
+After creating the application, you need to create a file called [`secrets.py`](config/secrets.py) in the [`config`](config) folder. This file will contain the client id and client secret of your Spotify application. You can find these in the Spotify developer dashboard. Make sure that this file is in the `.gitignore` file, because you don't want to share these secrets.
+
+
+

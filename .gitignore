@@ -1,0 +1,5 @@
+/.venv
+/audio_files
+secrets.py
+*/__pycache__
+.cache
