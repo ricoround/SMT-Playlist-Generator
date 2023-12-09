@@ -1,5 +1,6 @@
 /.venv
-/audio_files
+/audio_files/*
 secrets.py
 */__pycache__
 .cache
+music.sqlite
