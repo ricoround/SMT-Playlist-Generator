@@ -27,6 +27,38 @@ def beat_track(y, sr):
     return tempo, beats
 
 
+def scale_key(y, sr):
+    """
+    Returns the key and minor / major scale of a song
+
+    :param y: audio waveform
+    :param sr: sampling rate
+    :return: scale
+    """
+    # Compute chromagram
+    chromagram = librosa.feature.chroma_cqt(y=y, sr=sr)
+
+    # Summing up the energy in each chroma bin to get the overall energy for each pitch class
+    chroma_energy = np.mean(chromagram, axis=1)
+
+    # Find the key (index of the maximum energy)
+    estimated_key = np.argmax(chroma_energy)
+
+    # Define key names
+    key_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+    # Determine major or minor
+    # Major keys start at index 0 in the key_names list, minor keys start at index 9
+    if estimated_key < 9:
+        scale = "Major"
+        key = key_names[estimated_key]
+    else:
+        scale = "Minor"
+        key = key_names[estimated_key - 9]
+
+    return scale, key
+
+
 def load_audio(filename):
     """
     Loads the audio file and returns the audio waveform and sampling rate
@@ -75,7 +107,7 @@ def connect_to_db():
     cursor = conn.cursor()
     # Create table if it doesn't exist
     cursor.execute(
-        """CREATE TABLE IF NOT EXISTS songs (song_name TEXT PRIMARY KEY, tempo REAL)"""
+        """CREATE TABLE IF NOT EXISTS songs (song_name TEXT PRIMARY KEY, tempo REAL, scale STRING, key SCALE)"""
     )
     conn.commit()
     return conn, cursor
@@ -98,10 +130,11 @@ def main():
 
         y, sr = load_audio(os.path.join(folder_path, songname))
         tempo, _ = beat_track(y, sr)
+        scale, key = scale_key(y, sr)
 
         # Insert song and tempo into the database
         cursor.execute(
-            "INSERT INTO songs (song_name, tempo) VALUES (?, ?)", (songname, tempo)
+            "INSERT INTO songs (song_name, tempo, scale, key) VALUES (?, ?, ?, ?)", (songname, tempo, scale, key)
         )
         conn.commit()
 

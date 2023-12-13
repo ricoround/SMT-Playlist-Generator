@@ -4,3 +4,4 @@ secrets.py
 */__pycache__
 .cache
 music.sqlite
+.Rproj.user
