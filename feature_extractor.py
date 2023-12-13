@@ -88,12 +88,6 @@ def main():
     # Connect to the database
     conn, cursor = connect_to_db()
 
-    # Define the CSV file name
-    out = "output.csv"
-
-    # Check if the file exists to decide on writing the header
-    file_exists = os.path.isfile(out)
-
     for songname in filenames:
         print("Processing song:", songname)
 
@@ -111,8 +105,6 @@ def main():
         )
         conn.commit()
 
-        # After the first write, the file exists, so we don't write the header again
-        file_exists = True
 
     # Close database connection
     conn.close()
