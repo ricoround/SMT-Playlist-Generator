@@ -8,3 +8,5 @@ con <- dbConnect(SQLite(), "../music.sqlite")
 df <- con %>%
   dbReadTable("songs") %>%
   as_tibble()
+
+df
