@@ -33,7 +33,7 @@ def scale_key(y, sr):
 
     :param y: audio waveform
     :param sr: sampling rate
-    :return: scale
+    :return: scale, key
     """
     # Compute chromagram
     chromagram = librosa.feature.chroma_cqt(y=y, sr=sr)
@@ -57,6 +57,17 @@ def scale_key(y, sr):
         key = key_names[estimated_key - 9]
 
     return scale, key
+
+
+def get_duration(y):
+    """
+    Returns the song duration in seconds.
+
+    :param y: audio waveform
+    :return: duration
+    """
+    duration = librosa.get_duration(y=y)
+    return duration
 
 
 def load_audio(filename):
@@ -107,7 +118,7 @@ def connect_to_db():
     cursor = conn.cursor()
     # Create table if it doesn't exist
     cursor.execute(
-        """CREATE TABLE IF NOT EXISTS songs (song_name TEXT PRIMARY KEY, tempo REAL, scale STRING, key SCALE)"""
+        """CREATE TABLE IF NOT EXISTS songs (song_name TEXT PRIMARY KEY, tempo REAL, duration REAL, scale STRING, key SCALE)"""
     )
     conn.commit()
     return conn, cursor
@@ -136,11 +147,12 @@ def main():
 
         y, sr = load_audio(os.path.join(folder_path, songname))
         tempo, _ = beat_track(y, sr)
+        duration = get_duration(y)
         scale, key = scale_key(y, sr)
 
         # Insert song and tempo into the database
         cursor.execute(
-            "INSERT INTO songs (song_name, tempo, scale, key) VALUES (?, ?, ?, ?)", (songname, tempo, scale, key)
+            "INSERT INTO songs (song_name, tempo, duration, scale, key) VALUES (?, ?, ?, ?, ?)", (songname, tempo, duration, scale, key)
         )
         conn.commit()
 

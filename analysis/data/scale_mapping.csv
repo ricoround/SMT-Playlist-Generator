@@ -1,0 +1,25 @@
+scale; key; relative_scale; relative_key
+major; C  ; minor         ; A
+minor; C  ; major         ; D#
+major; C# ; minor         ; A#
+minor; C# ; major         ; E
+major; D  ; minor         ; B
+minor; D  ; major         ; F
+major; D# ; minor         ; C
+minor; D# ; major         ; F#
+major; E  ; minor         ; C#
+minor; E  ; major         ; G
+major; F  ; minor         ; D
+minor; F  ; major         ; G#
+major; F# ; minor         ; D#
+minor; F# ; major         ; A
+major; G  ; minor         ; E
+minor; G  ; major         ; A#
+major; G# ; minor         ; F
+minor; G# ; major         ; B
+major; A  ; minor         ; F#
+minor; A  ; major         ; C
+major; A# ; minor         ; G
+minor; A# ; major         ; C#
+major; B  ; minor         ; G#
+minor; B  ; major         ; D
