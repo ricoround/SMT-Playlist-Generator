@@ -1,8 +1,8 @@
-import json
 from config import secrets
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
+
 
 # Set up Spotify API (Make sure the secrets.py is setup correctly)
 spotify = spotipy.Spotify(
@@ -32,7 +32,10 @@ def get_playlist_tracks(playlist_url):
     """
     
     # Get the playlist
-    playlist = spotify.playlist(playlist_url)
+    try:
+        playlist = spotify.playlist(playlist_url)
+    except:
+        return None
     
     # Obtain some playlist information
     playlist_name = playlist["name"]
@@ -75,8 +78,7 @@ def get_playlist_tracks(playlist_url):
 def main():
     # Add the playlist URLs here
     playlists = [
-        #"https://open.spotify.com/playlist/4P4sVCiU21HvonfXg9wvDs",
-        #"https://open.spotify.com/playlist/3axoelQG1FrBeeq9MNTBP6",
+        "https://open.spotify.com/playlist/4P4sVCiU21HvonfXg9wvDs",
         "https://open.spotify.com/playlist/4v7hIKEzzsEgIKrjrLghb9"
     ]
     
