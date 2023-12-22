@@ -23,7 +23,7 @@ def get_track_features(track):
     return track_info[0] if track_info else None
 
 
-def get_playlist_tracks(playlist_url):
+def get_playlist_tracks(playlist_id):
     """
     Get all the song names from a given playlist
 
@@ -33,61 +33,97 @@ def get_playlist_tracks(playlist_url):
     
     # Get the playlist
     try:
-        playlist = spotify.playlist(playlist_url)
+        playlist = spotify.playlist(playlist_id)
     except:
         return None
     
+    
+    
     # Obtain some playlist information
-    playlist_name = playlist["name"]
+    playlist_name = playlist["name"]    
     playlist_description = playlist["description"]
     playlist_owner = playlist["owner"]["display_name"]
     playlist_tracks = playlist["tracks"]["items"]
     playlist_total_tracks = playlist["tracks"]["total"]
 
-    # Print the playlist info
-    print("Playlist name:", playlist_name)
-    print("Playlist description:", playlist_description)
-    print("Playlist owner:", playlist_owner)
-    print("Playlist total tracks:", playlist_total_tracks)
 
     # Loop through the playlist tracks
     song_features = []
     for track in playlist_tracks:
-        # Generate title
-        title = ""
-        for artist in track["track"]["artists"]:
-            title += artist["name"] + ", "
-        title = title[:-2] + " - " + track["track"]["name"]
         
-        # Get and store all track features
-        features = get_track_features(track["track"]["id"])
-        features["title"] = title
-        features["playlist_name"] = playlist_name
-        features["playlist_desc"] = playlist_description
-        features["playlist_owner"] = playlist_owner
-        features["playlist_total_tracks"] = playlist_total_tracks
-        song_features.append(features)
+        try:
+            artist = ""
+            for art in track["track"]["artists"]:
+                artist += art["name"] + ", "
+            artist = artist[:-2]
+            title = artist + " - " + track["track"]["name"]
+            
+            
+            print(f"Getting features for: {title}")
+            # Get and store all track features
+            features = get_track_features(track["track"]["id"])
+            features["title"] = title
+            features["playlist_name"] = playlist_name
+            features["playlist_desc"] = playlist_description
+            features["playlist_owner"] = playlist_owner
+            features["playlist_total_tracks"] = playlist_total_tracks
+            song_features.append(features)
 
+            
+            
+        except Exception as e:
+            print(e)
+        
     # Collapse to a single dataframe
     df_song_features = pd.DataFrame(song_features)
+    
 
     # Return the list of song names
     return df_song_features
 
 
-def main():
-    # Add the playlist URLs here
-    playlists = [
-        "https://open.spotify.com/playlist/4P4sVCiU21HvonfXg9wvDs",
-        "https://open.spotify.com/playlist/4v7hIKEzzsEgIKrjrLghb9"
-    ]
+def test():
+
+    query = "running"
+    offset = 0
+    search = spotify.search(q=query, limit=10, type="playlist", market="NL", offset=offset)
     
-    # Get all the song features for given playlists
     dfs = []
-    for playlist in playlists:
-        dfs.append(get_playlist_tracks(playlist))
+    
+    for playlist in search["playlists"]["items"]:
+        # print(playlist["name"], playlist["id"])
+        print(f"Getting tracks from playlist: {playlist['name']}")
+        tracks = get_playlist_tracks(playlist["id"])
+        if tracks is None:
+            continue
+        # print(tracks)
+        dfs.append(tracks)
+    
     df = pd.concat(dfs, ignore_index=True)
-    df.to_csv("analysis/data/spotify_data.csv", index=False)
+    df.to_csv("analysis/data/spotify_data_extended.csv", index=False)
+
+
+
+
+
+def main():
+    # TODO: implement function that puts all data in database instead of csv
+    
+    test()
+    
+    
+    # # Add the playlist URLs here
+    # playlists = [
+    #     "https://open.spotify.com/playlist/4P4sVCiU21HvonfXg9wvDs",
+    #     "https://open.spotify.com/playlist/4v7hIKEzzsEgIKrjrLghb9"
+    # ]
+    
+    # # Get all the song features for given playlists
+    # dfs = []
+    # for playlist in playlists:
+    #     dfs.append(get_playlist_tracks(playlist))
+    # df = pd.concat(dfs, ignore_index=True)
+    # df.to_csv("analysis/data/spotify_data.csv", index=False)
     
 
 if __name__ == "__main__":
