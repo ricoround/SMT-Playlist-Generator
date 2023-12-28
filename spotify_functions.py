@@ -5,11 +5,14 @@ import pandas as pd
 
 
 # Set up Spotify API (Make sure the secrets.py is setup correctly)
-spotify = spotipy.Spotify(
+def get_spotify_client():
+    return spotipy.Spotify(
     client_credentials_manager=SpotifyClientCredentials(
         client_id=secrets.SPOTIFY_CLIENT_ID, client_secret=secrets.SPOTIFY_CLIENT_SECRET
     )
 )
+
+spotify = get_spotify_client()
 
 
 def get_track_features(track):
@@ -82,25 +85,25 @@ def get_playlist_tracks(playlist_id):
     return df_song_features
 
 
-def test():
+# def test():
 
-    query = "running"
-    offset = 0
-    search = spotify.search(q=query, limit=10, type="playlist", market="NL", offset=offset)
+#     query = "running"
+#     offset = 0
+#     search = spotify.search(q=query, limit=10, type="playlist", market="NL", offset=offset)
     
-    dfs = []
+#     dfs = []
     
-    for playlist in search["playlists"]["items"]:
-        # print(playlist["name"], playlist["id"])
-        print(f"Getting tracks from playlist: {playlist['name']}")
-        tracks = get_playlist_tracks(playlist["id"])
-        if tracks is None:
-            continue
-        # print(tracks)
-        dfs.append(tracks)
+#     for playlist in search["playlists"]["items"]:
+#         # print(playlist["name"], playlist["id"])
+#         print(f"Getting tracks from playlist: {playlist['name']}")
+#         tracks = get_playlist_tracks(playlist["id"])
+#         if tracks is None:
+#             continue
+#         # print(tracks)
+#         dfs.append(tracks)
     
-    df = pd.concat(dfs, ignore_index=True)
-    df.to_csv("analysis/data/spotify_data_extended.csv", index=False)
+#     df = pd.concat(dfs, ignore_index=True)
+#     df.to_csv("analysis/data/spotify_data_extended.csv", index=False)
 
 
 
